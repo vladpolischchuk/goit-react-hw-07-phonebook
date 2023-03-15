@@ -4,7 +4,7 @@ import css from './ContactList.module.css';
 
 const ContactList = ({ removeContact, filteredContacts }) => {
 
-    const contactsList = filteredContacts.map(({ id, name, number }) => <li key={id} className={css.list__item}>{name}: {number}
+    const contactsList = filteredContacts.map(({ id, name, phone }) => <li key={id} className={css.list__item}>{name}: {phone}
         <button onClick={() => removeContact(id)} type="button" className={css.button__delete}>Delete</button></li>);
 
     return (

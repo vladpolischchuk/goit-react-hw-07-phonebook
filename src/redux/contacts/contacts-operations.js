@@ -1,63 +1,55 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+
 import * as api from "../../shared/services/contact-api";
 
-import * as actions from "./contacts-actions";
-
-export const fetchAllContacts = () => {
-    const func = async (dispatch) => {
+export const fetchAllContacts = createAsyncThunk(
+    "contacts/fetchAll",
+    async (_, thunkApi) => {
         try {
-            dispatch(actions.fetchAllContactsLoading()); //запрос пішов
             const data = await api.getAllContacts();
-            dispatch(actions.fetchAllContactsSuccess(data)); // запрос прийшов
+            return data;
         }
         catch ({ response }) {
-            dispatch(actions.fetchAllContactsError(response.data.message)); // відповідь з помилкою
+            return thunkApi.rejectWithValue(response.data);
         }
-    };
+    },
+);
 
-    return func;
-};
-
-const isDublicate = (contacts, { name }) => {
-    const normalizedName = name.toLowerCase();
-
-    const result = contacts.find(({ name }) => {
-        return (name.toLowerCase() === normalizedName);
-    });
-
-    return Boolean(result);
-};
-
-export const fetchAddContact = (data) => {
-    const func = async (dispatch, getState) => {
+export const fetchAddContact = createAsyncThunk(
+    "contacts/addContact",
+    async (data, { rejectWithValue }) => {
         try {
-            const { contacts } = getState();
-            if (isDublicate(contacts.items, data)) {
-                alert(`${data.name} contact is already ixist`);
-                return false;
-            }
-            dispatch(actions.fetchAddAllContactsLoading()); //запрос пішов
             const result = await api.addContact(data);
-            dispatch(actions.fetchAddAllContactsSuccess(result)); // запрос прийш
+            return result;
         }
         catch ({ response }) {
-            dispatch(actions.fetchAddAllContactsError(response.data.message)); // відповідь з помилкою
+            return rejectWithValue(response.data);
         }
-    };
+    },
+    {
+        condition: ({ name }, { getState }) => {
+            const { contacts } = getState();
+            const normalizedName = name.toLowerCase();
+            const result = contacts.find(({ name }) => {
+                return (name.toLowerCase() === normalizedName);
+            });
+            if (result) {
+                alert(`${name} is arleady ixist!`);
+                return false;
+            };
+        },
+    },
+);
 
-    return func;
-};
-
-export const fetchDeleteContact = (id) => {
-    const func = async (dispatch) => {
+export const fetchDeleteContact = createAsyncThunk(
+    "contacts/deleteContact",
+    async (id, { rejectWithValue }) => {
         try {
-            dispatch(actions.fetchDeleteContactsLoading());
             await api.deleteContact(id);
-            dispatch(actions.fetchDeleteContactsSuccess(id));
+            return id;
         }
         catch ({ response }) {
-            dispatch(actions.fetchDeleteContactsError(response.data.message)); // відповідь з помилкою
+            return rejectWithValue(response.data);
         }
-    };
-
-    return func;
-};
+    },
+);

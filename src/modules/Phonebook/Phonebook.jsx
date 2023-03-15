@@ -20,9 +20,9 @@ const Phonebook = () => {
 
     useEffect(() => {
         dispatch(fetchAllContacts());
-    },);
+    }, [dispatch]);
 
-    const handleContact = ({ name, number }) => {
+    const handleAddContact = ({ name, number }) => {
         dispatch(fetchAddContact({ name, number }));
     };
 
@@ -35,7 +35,7 @@ const Phonebook = () => {
     return (
         <div>
             <h1>Phonebook</h1>
-            <ContactForm onSubmit={handleContact} />
+            <ContactForm onSubmit={handleAddContact} />
             <h1>Contacts</h1>
             <ContactFilter value={filter} handleChange={handleFilter} />
             <ContactList removeContact={handleDeleteContact} filteredContacts={filteredContacts} />
