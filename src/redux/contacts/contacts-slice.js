@@ -27,9 +27,9 @@ const contactsSlice = createSlice({
             .addCase(fetchAddContact.pending, (store) => {
                 store.loading = true;
             })
-            .addCase(fetchAddContact.fulfilled, (store, { payload }) => {
+            .addCase(fetchAddContact.fulfilled, (store, action) => {
                 store.loading = false;
-                store.items.push(payload);
+                store.items.push(action.payload);
             })
             .addCase(fetchAddContact.rejected, (store, { payload }) => {
                 store.loading = false;

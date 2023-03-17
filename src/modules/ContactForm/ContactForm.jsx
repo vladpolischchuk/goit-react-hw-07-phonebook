@@ -27,6 +27,7 @@ const ContactForm = () => {
 
     const handleSubmit = e => {
         e.preventDefault();
+
         handleAddContact({ ...valeu });
         setValue({ ...initialState });
     }
