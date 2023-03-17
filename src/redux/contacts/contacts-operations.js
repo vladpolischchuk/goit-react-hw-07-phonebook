@@ -17,20 +17,21 @@ export const fetchAllContacts = createAsyncThunk(
 
 export const fetchAddContact = createAsyncThunk(
     "contacts/addContact",
-    async (data, { rejectWithValue }) => {
+    async (data, thunkApi) => {
         try {
             const result = await api.addContact(data);
             return result;
         }
         catch ({ response }) {
-            return rejectWithValue(response.data);
+            return thunkApi.rejectWithValue(response.data);
         }
     },
     {
         condition: ({ name }, { getState }) => {
             const { contacts } = getState();
+            console.log(contacts)
             const normalizedName = name.toLowerCase();
-            const result = contacts.find(({ name }) => {
+            const result = contacts.items.find(({ name }) => {
                 return (name.toLowerCase() === normalizedName);
             });
             if (result) {
@@ -43,13 +44,13 @@ export const fetchAddContact = createAsyncThunk(
 
 export const fetchDeleteContact = createAsyncThunk(
     "contacts/deleteContact",
-    async (id, { rejectWithValue }) => {
+    async (id, thunkApi) => {
         try {
             await api.deleteContact(id);
             return id;
         }
         catch ({ response }) {
-            return rejectWithValue(response.data);
+            return thunkApi.rejectWithValue(response.data);
         }
     },
 );

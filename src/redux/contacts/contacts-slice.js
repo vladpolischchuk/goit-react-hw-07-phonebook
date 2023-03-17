@@ -9,7 +9,7 @@ const initialState = {
 };
 
 const contactsSlice = createSlice({
-    name: "contacts",
+    name: 'contacts',
     initialState,
     extraReducers: (builder) => {
         builder

@@ -10,7 +10,7 @@ import { setFilter } from '../../redux/filter/filter-slice';
 import { getFilter } from '../../redux/filter/filter-selectors';
 import { getFilteredContacts } from "../../redux/contacts/contacts-selectors";
 
-import { fetchAllContacts, fetchAddContact, fetchDeleteContact } from '../../redux/contacts/contacts-operations';
+import { fetchAllContacts, fetchDeleteContact } from '../../redux/contacts/contacts-operations';
 
 const Phonebook = () => {
     const dispatch = useDispatch();
@@ -22,9 +22,6 @@ const Phonebook = () => {
         dispatch(fetchAllContacts());
     }, [dispatch]);
 
-    const handleAddContact = ({ name, number }) => {
-        dispatch(fetchAddContact({ name, number }));
-    };
 
     const handleDeleteContact = (id) => {
         dispatch(fetchDeleteContact(id));
@@ -35,7 +32,7 @@ const Phonebook = () => {
     return (
         <div>
             <h1>Phonebook</h1>
-            <ContactForm onSubmit={handleAddContact} />
+            <ContactForm />
             <h1>Contacts</h1>
             <ContactFilter value={filter} handleChange={handleFilter} />
             <ContactList removeContact={handleDeleteContact} filteredContacts={filteredContacts} />
